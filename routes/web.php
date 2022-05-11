@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', [HomeController::class, 'crawler']);
+//Default page, to show get url page
+Route::get('/', [HomeController::class, 'index']);
+
+//Route::post('/crawl', [HomeController::class, 'gouttecrawler']);
+
+//post data
+Route::post('storeData', [PostController::class, 'index']);
