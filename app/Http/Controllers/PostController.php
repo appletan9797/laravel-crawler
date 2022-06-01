@@ -10,8 +10,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        $result = DB::table('posts')->get();
-        return $result->toJson();
+        $result = DB::table('posts')->paginate(5);
+        return response($result,200);
+        //return $result->toJson();
     }
 
     public function show($id)
