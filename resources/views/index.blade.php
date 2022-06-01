@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>Laravel</title>
 
@@ -15,26 +16,12 @@
 
         </style>
 
-        <style>
-            body {
-                font-family: 'Nunito', sans-serif;
-            }
-
-            #iTextbox {
-                border: 3px solid #ccc;
-                width:50%;
-            }
-        </style>
+        <link href= "{{ asset('css/app.css') }}" rel="stylesheet">
+        <link href= "{{ asset('css/ownCss.css') }}" rel="stylesheet">
     </head>
     <body class="antialiased">
-        <h2>Laravel practice</h2>
 
-        <form method="post" action="storeData">
-            @csrf
-
-            <p id='test'>Please enter an URL to crawl:</p>
-            <p><input type="text" name="urlToCrawl" id="iTextbox"></p>
-            <input type="submit">
-        </form>
+        <div id="app"></div>
+        <script src="{{mix('js/app.js')}}" ></script>
     </body>
 </html>
