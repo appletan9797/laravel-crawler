@@ -86,9 +86,15 @@ td div {
 }
 
 .eachResult{
-    padding-left: 70px;
+    padding-left: 15%;
 }
 
 #iBtnHistory{
     margin-left: 20px;
+}
+
+#Pagination{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
 }

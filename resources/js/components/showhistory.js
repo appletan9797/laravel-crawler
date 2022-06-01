@@ -1,19 +1,24 @@
 import {Link} from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import AppContainer from './AppContainer';
+import Pagination from 'react-js-pagination';
+
 
 const ShowHistory = () =>{
 
     const [results, setResults] = useState([]);
+    const [paginations, setPagination] = useState();
     const [spinner, setSpinner] = useState(false);
 
-    const fetchResult = () => {
+    const fetchResult = async (pageNumber = 1) => {
         setSpinner(true);
 
-        axios.get('http://localhost/api/results')
+        await axios.get('http://localhost/api/results?page='+pageNumber)
         .then(res => {
             setSpinner(false);
-            setResults(res.data);
+            setPagination(res.data);
+            console.log(res);
+            setResults(res.data.data);
         }).catch (error => {
             console.log(error);
         });
@@ -26,10 +31,6 @@ const ShowHistory = () =>{
     const returnPost = () => {
         if (!results){
             return(
-                {/* <tbody>
-                    <tr>Loading Results....</tr>
-                </tbody> */}
-                <Text>
                 <h2>Loading...</h2>
             );
         }
@@ -62,6 +63,21 @@ const ShowHistory = () =>{
         return <div id='loading'>LOADING...</div>
     }
 
+    const returnPagination = () => {
+        if (!spinner){
+            return <Pagination
+            activePage={paginations?.current_page ? paginations?.current_page : 0}
+            itemsCountPerPage={paginations?.per_page ? paginations?.per_page : 0}
+            totalItemsCount={paginations?.total ? paginations?.total : 0}
+            onChange={(pageNumber) => {fetchResult(pageNumber);}}
+            itemClass="page-item"
+            linkClass="page-link"
+            firstPageText="First Page"
+            lastPageText="Last Page"
+        />
+        }
+    }
+
     return (
         <AppContainer title="Laravel Practice - Result">
             <div id = "btnMainPage">
@@ -69,10 +85,9 @@ const ShowHistory = () =>{
             </div>
             <div id="Container">
                 {spinner ? returnLoading() : returnPost()}
-
-                {/* <table>
-                    {returnPost()}
-                </table> */}
+            </div>
+            <div id="Pagination">
+                {returnPagination()}
             </div>
         </AppContainer>
     );
