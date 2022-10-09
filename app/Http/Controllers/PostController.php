@@ -8,11 +8,37 @@ use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $result = DB::table('posts')->paginate(5);
-        return response($result,200);
-        //return $result->toJson();
+        $results = DB::table('posts');
+        if ($request->has('titleFilter')){
+            $arrTitle = json_decode($request->titleFilter);
+            $results = $results->where(function ($query) use ($arrTitle){
+                for ($i=0; $i < count($arrTitle); $i++){
+                    $query->orwhere('page_title','like', '%'.$arrTitle[$i].'%');
+                }
+            });
+        }
+
+        if ($request->has('descFilter')){
+            $arrDesc = json_decode($request->descFilter);
+            $results = $results->orwhere(function ($query) use ($arrDesc){
+                for ($i=0; $i < count($arrDesc); $i++){
+                    $query->orwhere('page_desc','like', '%'.$arrDesc[$i].'%');
+                }
+            });
+        }
+
+        if ($request->has('dateFilter')){
+            $arrDate = json_decode($request->dateFilter);
+            $results = $results->orwhere(function ($query) use ($arrDate){
+                for ($i=0; $i < count($arrDate); $i++){
+                    $query->orwhere('created_at', '=', $arrDate[$i]);
+                }
+            });
+        }
+        $results = $results->paginate(5);
+        return response($results,200);
     }
 
     public function show($id)
